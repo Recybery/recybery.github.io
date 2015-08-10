@@ -1,0 +1,44 @@
+{% include head.html %}
+<br />
+<body>
+	<div align="center">	
+{{ page.title }}</div>
+<hr width="100%">
+<div id="content"class="container-fluid">
+{% if page.author %} 
+<h2>By <b>{{ page.author }}</h2></b>
+{% endif %}
+
+        {{ content }}
+	<br>
+</div>
+<hr>
+	<a name="license"</a>		<div align="center"style= "font-size:9px"class="well">
+{% include license.html %}
+		</div>
+
+
+
+   </body>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+       <!--<script src="/bootstrap.min.js"></script>-->
+    <!--<script src="/jquery.backstretch.min.js"></script>
+<script>
+    $.backstretch("/background.jpg");"id="header"align="center">
+    </script>
+    <script>	
+    $.backstretch("/background.jpg");
+    </script>-->
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.0.2.js"></script>
+    <script src="/js/collapse.js"></script>
+    <script src="/js/transition.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script language="Javascript" type="text/javascript">
+  function my_search_google()
+{ 
+var query = document.getElementById("my-google-search").value;
+window.open("http://google.com/search?q=" + query
++ "%20site:" + "http://recybery.space");
+}
+    </script>
+</html>

@@ -1,0 +1,13 @@
+---
+layout: page
+title: Blog
+tags: "hack, hacking, hacker, computer, internet, recycling, programming, seo, facebook, twitter, instagram"
+---
+<ul>
+{% for post in site.posts %}
+<li>
+<a href="{{ post.url }}">{{ post.title }}</a>
+</li>
+{% endfor %}
+</ul>
+                
