@@ -1,0 +1,11 @@
+---
+layout: page
+title: "Organizational Updates and Meeting Notes"
+---
+<ul>
+	  {% for post in site.minutes %}
+	      <li>
+		            <a href="{{ post.url }}">{{ post.title }}</a>
+			        </li>
+				  {% endfor %}
+</ul>
