@@ -1,0 +1,18 @@
+---
+layout: page
+title: Notes From Our Weekly Meetings
+tags: "hack, hacking, hacker, computer, internet, recycling, programming, boinc, arduino, electronics"
+---
+<p>
+Here are some of the longer-running projects our members have been working on!
+</p>
+<ul>
+{% for post in site.posts %}
+{% if post.categories contains 'project' %}
+<li>
+<a href="{{ post.url }}">{{ post.title }}</a>
+</li>
+{% endif %}
+{% endfor %}
+</ul>
+                
