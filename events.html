@@ -12,7 +12,7 @@ Here's what's been going on, and what's coming up:
 {% for post in site.posts %}
         {% if post.categories contains 'event' %}
                 {% assign postStartDate = post.date | date: '%s' %}
-                {% if postStartDate <= curDate %}
+                {% if postStartDate >= curDate %}
                         <p><a href="{{ post.url }}">{{ post.date  | date: '%B %d, %Y' }} : {{ post.title }}</a></p>
                 {% endif %}
         {% endif %}
@@ -25,7 +25,7 @@ Here's what's been going on, and what's coming up:
 {% for post in site.posts %}
         {% if post.categories contains 'event' %}
                 {% assign postStartDate = post.date | date: '%s' %}
-                {% if postStartDate >= curDate %}
+                {% if postStartDate <= curDate %}
                         <p><a href="{{ post.url }}">{{ post.date  | date: '%B %d, %Y' }} : {{ post.title }}</a></p>
                 {% endif %}
         {% endif %}
