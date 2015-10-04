@@ -1,0 +1,25 @@
+---
+layout: page
+title: "Meeting, 12 Sept 2015"
+tags: "organizational, meetings, notes"
+category: "minutes"
+---
+
+<p>We met this Saturday at iBooks and brainstormed some ideas for projects; John is interested in using maps for data visualization. We also talked a little bit about <a href="">object oriented programming</a>, looking at some of Charlie's older code. Colin patched a bug we found!</p>
+<p><center>This defines a "cell" object with a __str__ method, which defines the string which is displayed when the cell-object is printed: </center></p>
+<pre>
+class cell:
+	
+	def __init__(self, state=0):
+		self.state = state
+		
+	def __str__(self):
+		return self.state
+</pre>
+<p><center>But as written, __str__ returns self.state, which is an integer by default; this will raise an error. So, we use the built-in str() function to make sure a string would be returned: </center></p>
+<pre>
+	def __str__(self):
+		return str(self.state)
+</pre>
+<p>Dulce says the designs generated look like skulls!</p>
+<center> <img src="/media/October2015/skulldesign.jpg" class="img-responsive" alt="Responsive image"> </center>
