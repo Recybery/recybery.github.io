@@ -8,8 +8,22 @@ category: "project"
 <p>
 We decided that we needed to spice up <a hfre="http://recybery.space/irc/"> our IRC chatroom</a>, and in particular that we needed <a href="https://en.wikipedia.org/wiki/IRC_bot">a chatbot.</a> This is a computer program which monitors activity in a chat room, and can be instructed to perform actions upon command. For example, if someone in the chatroom types ".t", the chatbot will respond with the current date and time. We're currently using a <a href="http://inamidst.com/phenny/">Python-based program called Phenny</a> in our channel. The nice thing about open source software like Phenny is that it can easily be modified; we have added a few extra modules and commands. You can check out our modifications <a href="https://github.com/Recybery/phenny"> in this repository</a>. For example:
 <ul><li>Eric built a module to return phrases at random, like a Magic 8 Ball</li>
-<li>Charlie borrowed from Eric and Colin's telegraph scripts to make a morse-code translator </li></ul> 	
+<li>Charlie borrowed from Eric and Colin's telegraph scripts to make a morse-code translator </li>
+<li>Logging the chat and sending users a list of what they've missed since they last logged in</li></ul> 	
 Some things that we've talked about adding:
-<ul><li>Logging the chat and sending users a list of what they've missed since they last logged in</li>
+<ul>
+	<li>an option to request operator status </li>
+</ul>
+</p>
+<b>Documentation</b>
+<p>
+	[command [option]]
+<ul>
+	<li>.2morse [text] : converts plaintext to Morse code.</li>
+	<li>.2text [text] : translates Morse code back to plaintext.</li>
+	<li>.boinc : gives statistics on the BOINC simulations running on the same machine as the bot</li>
+	<li>.fillMeIn [number of lines]: updates the requesting user on the chatroom conversation they've missed. Default lines reported: 25</li>
+	<li>.m8b : a digital Magic 8-Ball gives predicts the future!</li>
+	<li>.stats : gives statistics on bot usage</li
 </ul>
 </p>
