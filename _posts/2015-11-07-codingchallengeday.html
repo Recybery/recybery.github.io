@@ -1,0 +1,29 @@
+---
+layout: page
+title: "Coding Challenge Day"
+tags: "perl,hacking,hackerspace,coding,challenge"
+category: "event"
+---
+
+<p>
+Nick came up with a series of coding challenges ranging from basic (Hello World, a factorial calculator) to advanced (an RSA encryption algorithm) and we chose Perl as a coding language, since none of us knew it. Using built-in help pages and examples from the internet, we tackled these problems and learned basic Perl syntax!
+</p>
+<p>Here's a factorial calculator, demonstrating recursion:
+<pre>
+#!/usr/bin/perl
+
+$input = $ARGV[0];
+
+sub factorial{
+	my $num=shift;
+	if ($num == 0){return 1;}
+	else {return $num * factorial($num-1);}
+}
+
+print factorial($input);
+print "\n"
+</pre></p>
+
+
+
+
