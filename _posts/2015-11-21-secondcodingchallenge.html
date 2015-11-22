@@ -8,22 +8,32 @@ category: "event"
 <p>
 We had so much fun at our <a href="http://recybery.space/event/2015/11/07/codingchallengeday/">Perl coding day</a> that we decided to have another one! To keep things interesting, the language we're using will be announced at the event. Nick is going to come up with a list of coding challenges that we'll tackle with cooperation and friendly competition!</p>
 <p>The coding day will be 3-5 PM, Saturday, 21 November, at Internationalist Books in Carrboro. Bring a laptop! (Snacks are also welcome)</p>
-<!--<p>Here's a factorial calculator, demonstrating recursion:
+<p><b>The Day Of!</b></p>
+<p>We chose <a href="https://www.rust-lang.org/"> Rust</a> as the language for this challenge. It was a bit of a struggle even to put together a Fibonacci sequence generator - this language has a steep learning curve!</p>
+<p>Here's a factorial calculator, demonstrating recursion:
 <pre>
-#!/usr/bin/perl
+use std::io;
 
-$input = $ARGV[0];
-
-sub factorial{
-	my $num=shift;
-	if ($num == 0){return 1;}
-	else {return $num * factorial($num-1);}
+fn fibber (x:i32) -> i32{
+	if x == 0 {
+	return 0;
+	}
+	else if x == 1 {
+	return 1;
+	}
+	else {
+	return fibber(x-2) + fibber(x-1); }
 }
 
-print factorial($input);
-print "\n"
-</pre></p>-->
+fn main (){
+	let mut input = String::new();
+	io::stdin().read_line(&mut input).ok().expect("Failed to read line");
+	let num_in: i32 = input.trim().parse().ok().expect("Please type a number!");
+	println!("Fibonacci sequence number {} is {}", num_in , fibber(num_in));
+	}
 
+</pre></p>
+<p>John also filled in the slow moments with an overview of lockpicking! </p>
 
 
 
