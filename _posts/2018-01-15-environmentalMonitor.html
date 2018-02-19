@@ -6,26 +6,26 @@ category: "project"
 ---
 
 
-One of Charlie's interests is remote sensing and environmental monitoring; there are several interesting applications:
+<p>One of Charlie's interests is remote sensing and environmental monitoring; there are several interesting applications:
+<ul>
+<li>gathering ecological data, such as the meteorological (temperature, humidity), the biological (animal noises), and the anthropological (light pollution from encroaching development). You can read some more about this <a href="https://topologicoceans.wordpress.com/2012/12/15/light-and-noise-in-the-anthropocene/">here at Charlie's blog</a> or at <a href="https://web.archive.org/web/20140916211811/http://arkfab.org/?p=340">this archived ArkFab post.</a></li>
+<li>Monitoring and automation of food production facilities, such as <a href="https://hackaday.com/2015/02/08/automated-mushroom-cultivation/">mycoponics</a> and <a href="https://makezine.com/projects/aquaponic-garden/">aquaponics</a>, <a href="https://hackaday.com/2012/06/05/large-scale-arduino-controlled-greenhouse-does-some-serious-farming/">greenhouses</a>, and <a href="https://makezine.com/projects/bees-sensors-monitor-hive-health/">apiaries</a>. </li>
+<li>Smart homes </li>
+</ul></p>
 
-* gathering ecological data, such as the meteorological (temperature, humidity), the biological (animal noises), and the anthropological (light pollution from encroaching development). You can read some more about this <a href="https://topologicoceans.wordpress.com/2012/12/15/light-and-noise-in-the-anthropocene/">here at Charlie's blog</a> or at <a href="https://web.archive.org/web/20140916211811/http://arkfab.org/?p=340">this archived ArkFab post.</a>
-* Monitoring and automation of food production facilities, such as <a href="https://hackaday.com/2015/02/08/automated-mushroom-cultivation/">mycoponics</a> and <a href="https://makezine.com/projects/aquaponic-garden/">aquaponics</a>, <a href="https://hackaday.com/2012/06/05/large-scale-arduino-controlled-greenhouse-does-some-serious-farming/">greenhouses</a>, and <a href="https://makezine.com/projects/bees-sensors-monitor-hive-health/">apiaries</a>. 
-* Smart homes 
+<p>This project aims to build a basic platform for monitoring the local environment, and ultimately build greenhouse and beehive monitors. </p>
 
-This project aims to build a basic platform for monitoring the local environment, and ultimately build greenhouse and beehive monitors. 
+<p><center><b>Jan 2018</b></center></p>
 
-<b>Jan 2018</b>
+<p>Adafruit provides combined temperature and humidity sensors, <a href="https://learn.adafruit.com/dht">the DHT series</a>. Although we have one of the nicer DHT22 sensors, let's start off using the less expensive (though less precise and more limited) DHT11. </p>
 
-Adafruit provides combined temperature and humidity sensors, <a href="https://learn.adafruit.com/dht">the DHT series</a>. Although we have one of the nicer DHT22 sensors, let's start off using the less expensive (though less precise and more limited) DHT11. 
+<p>One quantity that might be interesting to measure is the difference in temperature and humidity between a controlled environment like a greenhouse, and a reference environment, like the outdoors. To measure this, it'll be important to compare the two sensors under identical conditions, to get an idea of the bias and noise between them. </p>
 
-One quantity that might be interesting to measure is the difference in temperature and humidity between a controlled environment like a greenhouse, and a reference environment, like the outdoors. To measure this, it'll be important to compare the two sensors under identical conditions, to get an idea of the bias and noise between them. 
+<p>For monitoring light levels, we'll start off using CdS-based photoresistors. </p>
 
-For monitoring light levels, we'll start off using CdS-based photoresistors. 
+<p>Eventually, it'll be good to look into <a href="https://www.sparkfun.com/products/13287">WiFi</a> and <a href="">SD card shields</a> for data logging and <a href="https://boingboing.net/2017/06/30/charge-any-device-anywhere-wit.html">solar-powered battery packs for long-term, remote operation.</a> </p>
 
-
-Eventually, it'll be good to look into <a href="https://www.sparkfun.com/products/13287">WiFi</a> and <a href="">SD card shields</a> for data logging and <a href="https://boingboing.net/2017/06/30/charge-any-device-anywhere-wit.html">solar-powered battery packs for long-term, remote operation.</a> 
-
-For beehive monitoring, we'll also want to get a scale with digital strain sensors. 
+<p>For beehive monitoring, we'll also want to get a scale with digital strain sensors. </p>
 
 
 
