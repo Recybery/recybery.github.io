@@ -58,16 +58,15 @@ category: "project"
 <p>Humidity has a more complicated behavior: with the furnace cycling, the humidity difference varies between -1 and -2 percent between the two sensors. When the furnace stops cycling in the midday, the discrepancy jumps to almost 0 between them, then slowly relaxes back to the previous offset by the time the furnace cycle resumes. </p>
 
 <center> <img src="/media/February2018/double_DHT11_timeseries_DeltaH_closeup.png" class="img-responsive" alt="bias between humidity sensors"> </center>
-
+<p></p>
 <code>
 cereal=$1
 #e.g., /dev/ttyACM1
 phial_out=$2
 ttylog -b 9600 -d "$cereal" -f |  ts '%Y-%m-%d	%H:%M:%S' | tee "$phial_out"
 </code>
-
-<p> Here's some of the details of the code: the DHT11 and library report the measurements directly, which the Arduino reports to the serial port. Computerside, a bash script monitors the serial port with <a href="http://ttylog.sourceforge.net">ttylog</a>. In the wild, timestamping would happen Arduino-side; here it was accomplished by piping the serial port output through the </a href="https://rentes.github.io/unix/utilities/2015/07/27/moreutils-package/">moreutils ts command</a> before storing. </p>
-<p>Another design aspect is the sampling structure. Here's the Arduino code responsible: 
+<p> Here's some of the details of the code: the DHT11 and library report the measurements directly, which the Arduino reports to the serial port. Computerside, the above bash script monitors the serial port with <a href="http://ttylog.sourceforge.net">ttylog</a>. In the wild, timestamping would happen Arduino-side; here it was accomplished by piping the serial port output through the </a href="https://rentes.github.io/unix/utilities/2015/07/27/moreutils-package/">moreutils ts command</a> before storing. </p>
+<p>Another design aspect is the sampling structure. Here's the Arduino code responsible: </p><p>
 <code>
 int burst = 0;
 int replicate_number = 5; // how many replicates per burst
@@ -99,8 +98,7 @@ for (int counter = 0; counter &lt replicate_number; counter++){
   burst += 1;
   delay(burst_delay);
  }
-</code>
-The environment is sampled with an interval of<i>burst_delay</i> seconds; each sampling consists of <i>replicate_number</i> measurements, with a delay of <i>rep_delay</i> minimum delay units. The loop() function keeps a running count of the <i>burst</i> number, and a rolling count of the <i>counter</i> number, both of which are reported alongside the sensor readings. After some minor munging, the data looks something like this:
+</code></p><p>The environment is sampled with an interval of<i>burst_delay</i> seconds; each sampling consists of <i>replicate_number</i> measurements, with a delay of <i>rep_delay</i> minimum delay units. The loop() function keeps a running count of the <i>burst</i> number, and a rolling count of the <i>counter</i> number, both of which are reported alongside the sensor readings. After some minor munging, the data looks something like this:</p><p>
 <code>
 date    time    burst   replicate temp    hum
 2018-02-03      03:09:43        0       0       28.00   18.00
@@ -119,19 +117,18 @@ date    time    burst   replicate temp    hum
 2018-02-03      03:11:12        2       3       31.00   13.00
 2018-02-03      03:11:15        2       4       31.00   12.00
 ...
-</code>
-Once in this form, the data is ready to be processed through the <a href="http://tidyr.tidyverse.org">tidyr framework.</a> For example, the date and and time can be merged into a temporal object using the <a href="http://lubridate.tidyverse.org">lubridate</a>:
-<code>
+</code></p><p>
+Once in this form, the data is ready to be processed through the <a href="http://tidyr.tidyverse.org">tidyr framework.</a> For example, the date and and time can be merged into a temporal object using the <a href="http://lubridate.tidyverse.org">lubridate</a>:</p>
+<p><code>
 single_sensor_test &lt- data.frame(single_sensor_test)
 single_sensor_test$date&lt- ymd(single_sensor_test$date)
 single_sensor_test$time&lt- hms(single_sensor_test$time)
 single_sensor_test$dateTime &lt- single_sensor_test$date + single_sensor_test$time
 single_sensor_test$dateTime&lt- as.POSIXct(single_sensor_test$dateTime)
 </code>
-The five replicates in each burst can be easily summarized using <a href="http://dplyr.tidyverse.org">dplyr</a>'s group_by and summarize:
-<code>
+</p><p>The five replicates in each burst can be easily summarized using <a href="http://dplyr.tidyverse.org">dplyr</a>'s group_by and summarize:</p><p><code>
 single_sensor_test.summarized &lt- single_sensor_test %>% group_by(burst) %>% summarize(meanTime = mean(dateTime), meanTempC = mean(tempC), meanRelHum=mean(relHum))
-</code>
-There are a few reasons to take measurements this way, rather than constantly sampling or taking single samples. The first method could be inefficient at high sampling frequency, requiring large storage space for redundant data. Single samples, on the other hand, might result in a noisier signal, since instrumental variability wouldn't get averaged out at all. Another potential advantage is the counterintuitive fact that <a href="http://web.archive.org/web/20080402030712/tamino.wordpress.com/2007/07/05/the-power-of-large-numbers/">repeated sampling can give an estimate with a higher precision than that of the measurements themselves.</a>
+</code></p>
+<p>There are a few reasons to take measurements this way, rather than constantly sampling or taking single samples. The first method could be inefficient at high sampling frequency, requiring large storage space for redundant data. Single samples, on the other hand, might result in a noisier signal, since instrumental variability wouldn't get averaged out at all. Another potential advantage is the counterintuitive fact that <a href="http://web.archive.org/web/20080402030712/tamino.wordpress.com/2007/07/05/the-power-of-large-numbers/">repeated sampling can give an estimate with a higher precision than that of the measurements themselves.</a>
 </p>
 
