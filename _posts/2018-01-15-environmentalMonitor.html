@@ -59,16 +59,14 @@ category: "project"
 
 <center> <img src="/media/February2018/double_DHT11_timeseries_DeltaH_closeup.png" class="img-responsive" alt="bias between humidity sensors"> </center>
 <p></p>
-<code>
-cereal=$1
+<code>cereal=$1
 #e.g., /dev/ttyACM1
 phial_out=$2
 ttylog -b 9600 -d "$cereal" -f |  ts '%Y-%m-%d	%H:%M:%S' | tee "$phial_out"
 </code>
 <p> Here's some of the details of the code: the DHT11 and library report the measurements directly, which the Arduino reports to the serial port. Computerside, the above bash script monitors the serial port with <a href="http://ttylog.sourceforge.net">ttylog</a>. In the wild, timestamping would happen Arduino-side; here it was accomplished by piping the serial port output through the </a href="https://rentes.github.io/unix/utilities/2015/07/27/moreutils-package/">moreutils ts command</a> before storing. </p>
 <p>Another design aspect is the sampling structure. Here's the Arduino code responsible: </p><p>
-<code>
-int burst = 0;
+<code>int burst = 0;
 int replicate_number = 5; // how many replicates per burst
 int rep_delay = 2; // how many delayMS units to wait between replicates
 int burst_delay = 60; // how many seconds between measurements
@@ -99,8 +97,7 @@ for (int counter = 0; counter &lt replicate_number; counter++){
   delay(burst_delay);
  }
 </code></p><p>The environment is sampled with an interval of<i>burst_delay</i> seconds; each sampling consists of <i>replicate_number</i> measurements, with a delay of <i>rep_delay</i> minimum delay units. The loop() function keeps a running count of the <i>burst</i> number, and a rolling count of the <i>counter</i> number, both of which are reported alongside the sensor readings. After some minor munging, the data looks something like this:</p><p>
-<code>
-date    time    burst   replicate temp    hum
+<code>date    time    burst   replicate temp    hum
 2018-02-03      03:09:43        0       0       28.00   18.00
 2018-02-03      03:09:45        0       1       29.00   18.00
 2018-02-03      03:09:47        0       2       29.00   18.00
@@ -119,15 +116,13 @@ date    time    burst   replicate temp    hum
 ...
 </code></p><p>
 Once in this form, the data is ready to be processed through the <a href="http://tidyr.tidyverse.org">tidyr framework.</a> For example, the date and and time can be merged into a temporal object using the <a href="http://lubridate.tidyverse.org">lubridate</a>:</p>
-<p><code>
-single_sensor_test &lt- data.frame(single_sensor_test)
+<p><code>single_sensor_test &lt- data.frame(single_sensor_test)
 single_sensor_test$date&lt- ymd(single_sensor_test$date)
 single_sensor_test$time&lt- hms(single_sensor_test$time)
 single_sensor_test$dateTime &lt- single_sensor_test$date + single_sensor_test$time
 single_sensor_test$dateTime&lt- as.POSIXct(single_sensor_test$dateTime)
 </code>
-</p><p>The five replicates in each burst can be easily summarized using <a href="http://dplyr.tidyverse.org">dplyr</a>'s group_by and summarize:</p><p><code>
-single_sensor_test.summarized &lt- single_sensor_test %>% group_by(burst) %>% summarize(meanTime = mean(dateTime), meanTempC = mean(tempC), meanRelHum=mean(relHum))
+</p><p>The five replicates in each burst can be easily summarized using <a href="http://dplyr.tidyverse.org">dplyr</a>'s group_by and summarize:</p><p><code>single_sensor_test.summarized &lt- single_sensor_test %>% group_by(burst) %>% summarize(meanTime = mean(dateTime), meanTempC = mean(tempC), meanRelHum=mean(relHum))
 </code></p>
 <p>There are a few reasons to take measurements this way, rather than constantly sampling or taking single samples. The first method could be inefficient at high sampling frequency, requiring large storage space for redundant data. Single samples, on the other hand, might result in a noisier signal, since instrumental variability wouldn't get averaged out at all. Another potential advantage is the counterintuitive fact that <a href="http://web.archive.org/web/20080402030712/tamino.wordpress.com/2007/07/05/the-power-of-large-numbers/">repeated sampling can give an estimate with a higher precision than that of the measurements themselves.</a>
 </p>
