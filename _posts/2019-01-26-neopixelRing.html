@@ -1,0 +1,50 @@
+---
+layout: page
+title: "Fun with a NeoPixel Ring"
+tags: "arduino, neopixel, LED, RGB, programmable, modular arithmetic"
+category: "project"
+---
+
+<p>NeoPixels are a variety of <a href="https://learn.adafruit.com/adafruit-neopixel-uberguide">addressable multicolored LEDs</a>, meaning that their color and brightness can be programmed by a microcontroller like an Arduino. This can support some stunning cyberpunk aesthetics, like this <a href="https://learn.adafruit.com/neopixel-cyber-falls">wig</a> or this <a href="https://learn.adafruit.com/florabrella/tools-and-supplies">umbrella</a>. Imagine a bicycle with flickering strips of them, sliding along foggy Carrboro roads at night like a bioluminescent deep-sea cephalopod!<p>
+
+<p>We're going to start off learning on a 12-LED NeoPixel ring. Here's a few projects that we're looking at:
+
+<ul>
+<li> Generic NeoPixel Exercises
+<ol><li>Wiring to Arduino</li></ol></li>
+<li> Circular Topology
+<ol><li>Chasing Rainbow</li><li>Tunable Chasing Rainbow</li><li>Trigger-Reversible Chasing Rainbow</li><li>Dial-Reversible Chasing Rainbow</li></ol></li>
+<li> Modulo 12
+<ol><li>Analog Clock</li><li>Groups and Greatest Common Factors</li></ol></li>
+</ul>
+
+There's <a href="https://github.com/Recybery/NeoPixelFunRing">a github repo </a>for these projects, too!
+</p>
+
+
+
+<h2> Generic Exercises</h2>
+
+<p>Wiring can be a little tricky, with improper wiring sometimes causing weird flickering behavior! this glitchiness can be fun to watch for a little bit, but it's hard to develop with this unpredicable behavior interfering. Proper grounding seems to be key here. There's <a href="https://learn.adafruit.com/adafruit-neopixel-uberguide/basic-connections">a wiring guide at Adafruit.</a> A little solder and we're ready to go! </p>
+
+<h2> Circular Topology </h2>
+
+<p>The NeoPixels are addressable, which means that each one is given a unique integer to identify it. Here's this idea in practice, from <a href="https://github.com/adafruit/Adafruit_NeoPixel/blob/master/examples/strandtest/strandtest.ino">an example script</a>:<code>
+// Fill the dots one after the other with a color
+void colorWipe(uint32_t c, uint8_t wait) {
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+    strip.setPixelColor(i, c);
+    strip.show();
+    delay(wait);
+  }
+}
+</code>
+This arduino function acccepts a color <i>c</i>. Using a for loop, it then sets each pixel i to have color c in sequence: first pixel #0, then pixel #1, then pixel #2.... all the way up to the total number of pixels in the device. (The rest of the function updates the hardware and controls the speed). In other words, while one might separate the neopixels and arbitrarily arrange them in 3-space, the software still views them as standing in an ordered, single file line. The specifics of the code can add some extra structure, and the ring shape suggests a natural addition, which is to treat the last pixel in sequence as standing one unit before the first pixel, such that propagating behavior like chaser lights "wrap around" when it reaches the end of the series. A simple implementation of this uses a math and computing concept called <a href="https://en.wikipedia.org/wiki/Modular_arithmetic">modular arithmetic.</a> </p>
+
+<h2>Modulo 12</h2>
+
+<p>This ring has 12 lights in it, which means that we can do some interesting things that we might not with a different number. One has to do with timekeeping, which splits time into 12-hour half-days, 60-minute hours, and 60-second minutes (sixty being twelve times five). The twelve pixels arranged in a circle might form a familiar clockface, with color being used to differentiate between hour, minute, and second markers.</p>
+<p>We might also use the 12 lights to illustrate some facts about abstract algebra: The circular arrangement of lights can illustrate how numbers coprime to 12 (ie those which don't share a greatest common denominator: 1,5,7,11) generate the whole 12-member group under modular addition, while numbers which share a divisor with 12 (ie, 2,3,4,6,8,9) generate a subgroup with order equal to twelve divided by the common divisor. 
+</p>
+
+
