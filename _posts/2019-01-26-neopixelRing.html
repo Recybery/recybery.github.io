@@ -29,16 +29,18 @@ There's <a href="https://github.com/Recybery/NeoPixelFunRing">a github repo </a>
 
 <h2> Circular Topology </h2>
 
-<p>The NeoPixels are addressable, which means that each one is given a unique integer to identify it. Here's this idea in practice, from <a href="https://github.com/adafruit/Adafruit_NeoPixel/blob/master/examples/strandtest/strandtest.ino">an example script</a>:<code>
+<p>The NeoPixels are addressable, which means that each one is given a unique integer to identify it. Here's this idea in practice, from <a href="https://github.com/adafruit/Adafruit_NeoPixel/blob/master/examples/strandtest/strandtest.ino">an example script</a>:
+<xmp>
 // Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
-    strip.setPixelColor(i, c);
+    strip.setPixelColor(i, c);0
     strip.show();
     delay(wait);
   }
-}
-</code>
+}   
+</xmp>
+
 This arduino function acccepts a color <i>c</i>. Using a for loop, it then sets each pixel i to have color c in sequence: first pixel #0, then pixel #1, then pixel #2.... all the way up to the total number of pixels in the device. (The rest of the function updates the hardware and controls the speed). In other words, while one might separate the neopixels and arbitrarily arrange them in 3-space, the software still views them as standing in an ordered, single file line. The specifics of the code can add some extra structure, and the ring shape suggests a natural addition, which is to treat the last pixel in sequence as standing one unit before the first pixel, such that propagating behavior like chaser lights "wrap around" when it reaches the end of the series. A simple implementation of this uses a math and computing concept called <a href="https://en.wikipedia.org/wiki/Modular_arithmetic">modular arithmetic.</a> </p>
 
 <h2>Modulo 12</h2>
