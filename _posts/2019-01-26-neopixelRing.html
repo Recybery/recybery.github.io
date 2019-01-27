@@ -34,7 +34,7 @@ There's <a href="https://github.com/Recybery/NeoPixelFunRing">a github repo </a>
 // Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
-    strip.setPixelColor(i, c);0
+    strip.setPixelColor(i, c);
     strip.show();
     delay(wait);
   }
@@ -46,7 +46,7 @@ This arduino function acccepts a color <i>c</i>. Using a for loop, it then sets 
 <h2>Modulo 12</h2>
 
 <p>This ring has 12 lights in it, which means that we can do some interesting things that we might not with a different number. One has to do with timekeeping, which splits time into 12-hour half-days, 60-minute hours, and 60-second minutes (sixty being twelve times five). The twelve pixels arranged in a circle might form a familiar clockface, with color being used to differentiate between hour, minute, and second markers.</p>
-<p>We might also use the 12 lights to illustrate some facts about abstract algebra: The circular arrangement of lights can illustrate how numbers coprime to 12 (ie those which don't share a greatest common denominator: 1,5,7,11) generate the whole 12-member group under modular addition, while numbers which share a divisor with 12 (ie, 2,3,4,6,8,9) generate a subgroup with order equal to twelve divided by the common divisor. 
+<p>We might also use the 12 lights to illustrate some facts about abstract algebra: The circular arrangement of lights can illustrate how numbers coprime to 12 (ie those which don't share a greatest common denominator: 1,5,7,11) generate the whole 12-member group under modular addition, while numbers which share a divisor with 12 (ie, 2,3,4,6,8,9,10) generate a subgroup with order equal to twelve divided by the common divisor. 
 </p>
 
 
