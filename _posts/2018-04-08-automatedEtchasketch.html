@@ -13,7 +13,7 @@ category: "project"
 
 <p>Right now, the dials are controlled by 28BYJ-48 stepper motors and the standard driver library. Rubber bands worked pretty well as drive belts, but they were too elastic to transmit fine changes and tended to slip on the smooth posts of the toy. An alternative scheme uses gears instead and has the advantage that the ratio of motor turns to dial turns can be adjusted. These gears were designed in openSCAD using <a href="http://www.thingiverse.com/thing:5505">this gear generating library<a>, and 3D printed at <a href="https://beam.unc.edu/">UNC-BEAM</a>:</p>
 
-<p><center> <img src="media/March2019/IMG_20190330_etchasketchGears.jpg" class="img-responsive" alt="updated with 3d-printed gears"> </center></p>
+<p><center> <img src="/media/March2019/IMG_20190330_etchasketchGears.jpg" class="img-responsive" alt="updated with 3d-printed gears"> </center></p>
 
 <p>The gears probably need to be redesigned with smaller radii and finer teeth, but this set up is working well enough to test out some basic routines. for example, this loop draws horizontal and vertical lines alternately. With each pass of the loop, the size of each line drawn is scaled up by a factor of 1.1; the sign, corresponding to the direction of travel, is also reversed.</p>
 
@@ -35,7 +35,7 @@ void loop(){
 
 <p>Since each line segment starts where the last one ends, this draws a spiral expanding outwards. Varying the scaling of the two line sizes can create a variety of patterns. Setting different (negative) scaling rates for the horizontal and vertical will give rectanglular spirals with different aspect ratios. If the scaling rates are between -1 and 0 exclusive, the spiral will contract inward rather than expand outwards. If one of the rates is positive, a square-wave pattern will be produced; if both are positive, it will produce a staircase.</p>
 
-<p><center> <img src="media/March2019/IMG_20190330_spiralTrace.jpg" class="img-responsive" alt="our first spiral trace"> </center></p>
+<p><center> <img src="/media/March2019/IMG_20190330_spiralTrace.jpg" class="img-responsive" alt="our first spiral trace"> </center></p>
 
 <p>Here's a few similar projects:</p>
 <ul>
