@@ -5,18 +5,40 @@ tags: "arduino,microcontroller,stepper motor,etch-a-sketch,generative art"
 category: "project"
 ---
 
-
-
 <p>The Etch-a-Sketch is a classic toy, in which two knobs are used to independently control the horizontal and vertical movement of a pointed, which removes a dust coating from a plastic screen, leaving a semi-permentant trace. What if we attach stepper motors to the knobs and control them by computer, instead of by hand? There's several possible applications; one particularly well-suited to the Etch-a-Sketch is generative art based upon <a href="https://en.wikipedia.org/wiki/L-system">Lindenmeyer systems</a>. These are often continuous, connected lines (the Etch-a-Sketch can not lift its pen up and down) and describe interesting patterns such as fractals and plant shapes.</p>
 
 <p> This is fun, and also illustrates the principles behind automated production tools like CNC machines, laser cutters, and 3D printers. </p>
 
+<p><center> <img src="/media/April2018/etchasketchConstruction1.jpg" class="img-responsive" alt="stepper motors to turn knobs via rubber band"> </center></p>
+
+<p>Right now, the dials are controlled by 28BYJ-48 stepper motors and the standard driver library. Rubber bands worked pretty well as drive belts, but they were too elastic to transmit fine changes and tended to slip on the smooth posts of the toy. An alternative scheme uses gears instead and has the advantage that the ratio of motor turns to dial turns can be adjusted. These gears were designed in openSCAD using <a href="http://www.thingiverse.com/thing:5505">this gear generating library<a>, and 3D printed at <a href="https://beam.unc.edu/">UNC-BEAM</a>:</p>
+
+<p><center> <img src="media/March2019/IMG_20190330_etchasketchGears.jpg" class="img-responsive" alt="updated with 3d-printed gears"> </center></p>
+
+<p>The gears probably need to be redesigned with smaller radii and finer teeth, but this set up is working well enough to test out some basic routines. for example, this loop draws horizontal and vertical lines alternately. With each pass of the loop, the size of each line drawn is scaled up by a factor of 1.1; the sign, corresponding to the direction of travel, is also reversed.</p>
+
+<code>
+void setup(){
+  hSteps  = STEPS_PER_OUTPUT_REVOLUTION / 2 ;
+  vSteps  = STEPS_PER_OUTPUT_REVOLUTION / 2;
+  horiz_stepper.setSpeed(500); 
+  vert_stepper.setSpeed(500);  
+}
+
+void loop(){
+  horiz_stepper.step(hSteps);
+  hSteps *= -1.1;
+  vert_stepper.step(vSteps);
+  vSteps *= -1.1;
+}
+</code>
+
+<p>Since each line segment starts where the last one ends, this draws a spiral expanding outwards. Varying the scaling of the two line sizes can create a variety of patterns. Setting different (negative) scaling rates for the horizontal and vertical will give rectanglular spirals with different aspect ratios. If the scaling rates are between -1 and 0 exclusive, the spiral will contract inward rather than expand outwards. If one of the rates is positive, a square-wave pattern will be produced; if both are positive, it will produce a staircase.</p>
+
+<p><center> <img src="media/March2019/IMG_20190330_spiralTrace.jpg" class="img-responsive" alt="our first spiral trace"> </center></p>
 
 <p>Here's a few similar projects:</p>
-
 <ul>
 <li><a href="http://atomsandelectrons.com/blog/2009/07/toys-for-bots/">"Toys for Bots"</a></li>
 <li><a href="http://www.geekmomprojects.com/etchabot-a-cnc-etch-a-sketch/">A detailed writeup</a></li>
 </ul>
-
-<p><center> <img src="/media/April2018/etchasketchConstruction1.jpg" class="img-responsive" alt="stepper motors to turn knobs via rubber band"> </center></p>
