@@ -131,3 +131,47 @@ single_sensor_test$dateTime&lt- as.POSIXct(single_sensor_test$dateTime)
 <center> <img src="/media/October2018/luminosity_temp_timeline.png" class="img-responsive" alt="luminosity and temperature"> </center>
 
 <p>This seems to work well at distinguishing between moderate levels of lighting, but it might not be good for distinguishing low levels (like the difference between a full and a new moon) or small differences (like changes in cloud cover over the course of a day). A more advanced option might be the <a href="https://www.adafruit.com/product/1980">TSL2591 sensor</a>.</p>
+<p><center><b>July 2019</b></center></p>
+
+<p>A lot of work has been going on behind the scenes on this project, but I've been waiting to get a decent dataset for measuring scale drift before posting here. Along the way, this has meant: 
+<ul>
+<li>moving time-stamping off of the computer-side serial connection and onto the board itself using an RTC module</li>
+<li>using on-board USB logging, eventually turning to a logging shield</li>
+<li>adding a weight sensor using a repurposed bathroom scale</li>
+<li>experimenting with mobile power supplies</li>
+</ul>
+That last item is still troublesome! It would have been nice if it could use the inexpensive, waterproof solar chargers you can get for phones. Unfortunately, it looks like the model I tried has a minimum power-draw requirement, before it would shut down. If the Arduino goes to sleep (as intended, to save battery), it doesn't draw enough to keep the supply on! It looks like this might need a custom-built power supply after all, but it's weird to be in a situation where the problem is that the power consumption is <i>too small</i>!
+</p>
+<p>
+The logger was run for about a week and a half at a sampling frequency of about 5 minutes, with six replicates per sample burst. A known weight (1 gallon of water = 8.34 lb = 3.785 kg) was placed on the scale. The purpose was primarily to get information on how the scale's measurement of a constant weight would fluctuate. Instrumental drift is apparently a concern when the load cells of the scale are used continuously for long periods. Once the replicates are averaged into burst values, the weight measurements look like this:
+</p>
+<center> <img src="/media/July2019/rawAverageScaleTrace.png" class="img-responsive" alt="time series of weight, raw averages"> </center>
+<p>Scaled to their range, the weight measurents are relatively steady: there is the step-up at the start of the time series, when the gallon jug of water was placed on the tared scale. There are also a very small number of transient spikes into values higher by a factor of 3. It's not obvious where these are coming from. They appear to be distributed evenly throughout the day: <code>
+
+> inner_join(timeLapse, timeLapse.summarized %>% filter(meanWt >5) %>% select(burst), by = c("burst"="burst")) %>% select(date) %>% summary()
+      date           
+ Min.   :2019-06-26  
+ 1st Qu.:2019-06-26  
+ Median :2019-06-30  
+ Mean   :2019-06-30  
+ 3rd Qu.:2019-07-04  
+ Max.   :2019-07-06
+
+>inner_join(timeLapse, timeLapse.summarized %>% filter(meanWt >5) %>% select(burst), by = c("burst"="burst")) %>% select(time) %>% summary()
+      time                        
+ Min.   :1M 0S                    
+ 1st Qu.:3H 0M 55.75S             
+ Median :8H 11M 26.5S             
+ Mean   :9H 16M 30.32S
+ 3rd Qu.:13H 22M 17.25S           
+ Max.   :23H 17M 55S   
+
+</code> </p><p>Looking at the raw data, it appears that these spikes are caused by individual bad replicates within a measurement burst. These can be excluded, and the average value calculated on the "good" replicates. This means that we can still rescue a reasonable data point from a burst with a bad replicate, although the measurement will have a smaller sample size. Most mysteriously, the bad replicates are not evenly distributed among the measurements taken, but only occur in the third and fifth measurements in a burst!</p>
+
+<center> <img src="/media/July2019/measuredWeightByReplicate.png" class="img-responsive" alt="individual outliers are responsible for bogus average measurements, and they are non-random among replicate order"> </center>
+
+<p>Although these spikes are extreme, there are very few of them. In fact, of 2800 averaged measurements, only 18 (~0.6%) were such obvious outliers. When filtered to remove them, and the initially empty scale, we get a periodic oscillation of measured weight, mostly between 3.7 and 3.8 kg, with excusrions as far as 3.6 or 3.9. The raw data have also been included, which fall into discrete 0.1 kg increments, and have been colored with their measured temperature to indicate a likely culprit: many electronic devices change their behavior slightly with temperature. As we continue working on this project, a goal will be finding a model to correct the measured weight based on measured temperature. All in all though, this is reassuring: there doesn't seem to be a lot of unmanageable instrumental drift on the scale of days-to-weeks!</p>
+
+<center> <img src="/media/July2019/FilteredWeightTimeSeries.png" class="img-responsive" alt="Filtered time series for weight measurements"> </center>
+
+
