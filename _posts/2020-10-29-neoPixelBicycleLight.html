@@ -10,14 +10,13 @@ category: "project"
 <p>That's what I said when I first got started with the <a href="_posts/2019-01-26-neopixelRing.html">NeoPixel ring</a>. Well, we also have a 60-pixel strip. This is an opportunity to learn some electrical engineering, develop some cool neopixel effects, and keep me illuminated while I'm biking around at night.</p>
 
 <p>The first step was to lift the control circuit off the breadboard and onto a more permanent printed circuit board. This was my first experience with the process of PCB design and fabrication, so I spent a lot of time watching the <a href = "https://www.youtube.com/watch?v=vaCVh2SAZY4&list=PLEBQazB0HUyR24ckSZ5u05TZHV9khgA1O&index=8">DigiKey guide to KiCad software.</a> The PCBs were printed in a facility and we have several copies now, which will be helpful for the next project of this sort. </p>
-
-<center> <img src="/media/October2020/controlCircuit.jpeg" class="img-responsive" alt="neopixel control and power circuit" title="neopixel control and power circuit"> </center>
-
-
+<p></p>
+<center> <img src="/media/October2020/controlCircuit.jpeg" class="img-responsive" alt="neopixel control and power circuit" title="neopixel control and power circuit" style="width:800px;height:500px;"> </center>
+<p></p>
 <p>I don't want a monotonous light pattern; I want to be able so select among them. So, I need at least one button to increment the pattern program. While we're adding control buttons, let's add another - this will act as a second discrete control. Might as well add two potentiometers to act as continuous analog controls. The rest of the circuit follows the <a href="https://learn.adafruit.com/adafruit-neopixel-uberguide/basic-connections">adafruit uberguide</a>. Finally, there's a global power on/off switch.</p>
-
+<p></p>
 <center> <img src="/media/October2020/PCB_design.png" class="img-responsive" alt="PCB schematic" title="PCB schematic"> </center>
-
+<p></p>
 <p>The code framework for the arduino is pretty straight forward: There's variable and pin initialization and the interface with the neopixel strip is set up. One detail is that, to override the pattern loop, the button pins are set as interrupts. I don't fully understand this! I am also not following <a href="https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/">best-use advice</a>, because I can't get it to work correctly.</p>
 
 <code>
@@ -162,14 +161,13 @@ void Twinkle(byte red, byte green, byte blue){
 </code>
 
 <p>This project was partly inspired by <a href="https://www.tweaking4all.com/hardware/arduino/adruino-led-strip-effects/">this HackADay-featured collection of effects,</a> and the next program in the queue, Twinkle, is based directly on one of theirs. The core of the Twinkle function is the repeated setPixel(random(NUM_LEDS), ...) call, which assigns a given color to a random LED each time it's invoked. On top of the original core, there are some modifications: the time between individual sparkles (twinkleDelay) is set by the first potentiometer. The actual number of the sparkles (twinkleCount) is set by the other potentiometer. This pattern also makes use of the second button to toggle whether the strip is blanked (ie, all pixels set to 0). If the second button is pressed, this is turned off. The pixel stays at its last set color until it is randomly overwritten.</p>
-
-
+<p></p>
 <center> <img src="/media/October2020/sparkle.gif" class="img-responsive" alt="sparkle routine" title="sparkle routine"> </center>
-
+<p></p>
 <p>To keep things interesting, the Twinkle function is called with a random color with each pass of loop(). Originally this was implemented by calling a random number between 0 and 255 independently for each of the red, green, and blue channels. This works well enough, but the palette it generates tends to be more pastel than I'd necessarily like. To make the colors more vivid, random colors were generated here by assuming that there are 255 total color points to assign, and distributing them randomly across the three channels.</p>
-
+<p></p>
 <center> <img src="/media/October2020/sprinkle.gif" class="img-responsive" alt="sprinkle routine" title="sprinkle routine"> </center>
-
+<p></p>
 <code>
    case 2:
       if(setting % 2 == 0){
@@ -200,9 +198,9 @@ void VaporWave(int WaveDelay){
 </code>
 
 <p>The next program is a pair of cycling color routines. The first was a rainbow cycle adapted from an example script from the <a href="https://github.com/adafruit/Adafruit_NeoPixel">adafruit NeoPixel library</a>, modified to have the cycle speed controlled by the first potentiometer. The other one, VaporWave, is an original of mine. Each pixel has its blue channel set to 127 of 255, and it's green channel set to 0. Then, the red channel is set according to a sine wave with a maximum of 255 and a minimum of 0. </p>
-
+<p></p>
 <center> <img src="/media/October2020/vaporwave.gif" class="img-responsive" alt="vaporwave routine" title="vaporwave routine"> </center>
-
+<p></p>
 <code>
 
     case 3:
@@ -239,10 +237,9 @@ void Strobe(byte red, byte green, byte blue, int StrobeCount){
 delay(FlashDelay*2);
 }
 </code>
-
+<p></p>
 <center> <img src="/media/October2020/strobe.gif" class="img-responsive" alt="strobe routine" title="strobe routine"> </center>
-
-
+<p></p>
 <p>The next pattern is also a modification of a tweaking4all routine, which accepts a color and flashes it several times. A potentiometer read controls the rate of the flashing, and the setting button toggles between two schemes: in the first, red green and blue are each flashed a random number of times; in the second, a random color is flashed three times. </p>
 <code>
     case 4:
@@ -287,12 +284,13 @@ void blaster( ){
     }
 }
 </code>
+<p></p>
 <center> <img src="/media/October2020/blaster.gif" class="img-responsive" alt="blaster routine" title="blaster routine"> </center>
-
+<p></p>
 <center> <img src="/media/October2020/splatter.gif" class="img-responsive" alt="splatter routine" title="splatter routine"> </center>
-
+<p></p>
 <p>This last pattern is a heavily modified version of the tweaking4all Cylon program. In each cycle, a potentiometer is read and the result converted into an interval length. A random color is chosen from among red only, blue only, and green only. A point on the chain is selected at random, the next several pixels are colored. The actual number, <i>interval</i>, is controlled by one potentiometer; the other controls <i>blastDelay</i>, which determines the wait time until the next block is written. The overall effect is of random chunks of light flashing off and on. This routine also makes use of the setting button, which toggles the end-of-loop blanking. When this is turned off, the colored bars pile up on each other, like a chunkier version of the Twinkle effect.</p>
-
-<center> <img src="/media/October2020/setTheControls.jpg" class="img-responsive" alt="the current module" title="the current module"> </center>
-
+<p></p>
+<center> <img src="/media/October2020/setTheControls.jpg" class="img-responsive" alt="the current module" title="the current module" style="width:800px;height:500px;"> </center>
+<p></p>
 <p>The circuits were wired up, and the whole thing put in a mostly water-tight container, including a vinyl tube to house the NeoPixel strip. Right now the lights are just sort of wrapped around the bike like a rope. This works well enough, but a future modification will probably break the strip into subsegments with specific locations on the bike, such as horizontal strips on the sides and vertical ones on the front/back. This change of topology will require some rethinking of how the pixels are addressed, but it will also permit new patterns. For example, with pixels arranged in space rather than just sequence, you could create a consistent gradient. Putting blue at the front of the bike and red in the back would simulate the doppler effect of an object moving at relativistic speeds, with the intensity of the redshift controlled by potentiometer. </p>
